@@ -6,21 +6,42 @@ class Book:
         self.num_pages = num_pages;
         self.available = True;
 
+    def __str__(self):
+        string_parts = [f"{self.title} written by {self.author}\n--> {self.num_pages} pages, "];
+        if self.available: string_parts.append("Available");
+        else: string_parts.append("Unavailable");
+
+        return "".join(string_parts);
+
+
 class Library:
     def __init__(self):
         self.books = [];
+
+    def __str__(self):
+        if len(self.books) == 0:
+            return "Book list is empty\n";
+
+        print("> List of Books <");
+        book_list = []
+        for i, book in enumerate(self.books):
+            book_list.append(f"{i}. {str(book)}");
+            if len(self.books) > 1:
+                book_list.append("\n\n");
+
+        return "".join(book_list);
 
     def add_book(self, book):
         self.books.append(book);
 
     def remove_book(self, title):
-        for i in range(0, len(self.books)):
-            if self.books[i].title == title:
+        for i, book in enumerate(self.books):
+            if book.title == title:
                 self.books.pop(i);
                 print(f"Book named {title} was deleted.");
 
     def check_out(self, title):
-        for i in range(0, len(self.books)):
+        for i, book in enumerate(self.books):
 
             if self.books[i].title == title: 
                 if self.books[i].available == True:
@@ -29,7 +50,7 @@ class Library:
                     print("Book is already checked out");
 
     def check_in(self, title):
-        for i in range(0, len(self.books)):
+        for i, book in enumerate(self.books):
 
             if self.books[i].title == title:
                 if self.books[i].available == False:
@@ -37,16 +58,6 @@ class Library:
                 else:
                     print("Book is already checked in");
 
-    def print_books(self):
-        print("> List of books <");
-        if len(self.books) == 0:
-            print("Book list is empty");
-            return;
-
-        for book in self.books:
-            print(f"Title: {book.title} written by {book.author}\n--> {book.num_pages} pages");
-            if book.available == True: print("--> Available\n");
-            else: print("--> Unavailable\n");
 
 
 

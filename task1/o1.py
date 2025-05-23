@@ -1,10 +1,12 @@
 # PYTHON EXAM
 # TASK 1
 import random as rand
+import os
 
 try:
     word_file = open("words.txt", "r");
-    word_list = word_file.readline().split(" ");
+    # Reads a line from the file, removes \n and whitespace, and splits it on " "
+    word_list = word_file.readline().strip().split(",");
     rand_int = rand.randint(0, len(word_list) - 1) ;
 
     word_rand = word_list[rand_int];
@@ -37,16 +39,24 @@ try:
     # Program start
     print("Welcome to the word guessing game!");
     print("A random word will be chosen and you will have to guess it through guessing letters.");
-
     print(f"\nYour word has {len(word_rand)} letters. Good luck!\n\n");
+
+    input("> Press ENTER to continue <\n");
+    os.system("clear");
 
     guesses = 8;
     while guesses > 0:
-        print(f"\n\nYou have {guesses} guesses left.");
+
+        # if its empty, break the loop and congratulate the user etc etc.
+        if len(word_dict) == 0:
+            print(f"\n\nYou guessed all the letters!\nThe word was -> \"{word_rand}\"");
+            break;
+
         # print the letters found, or empty spots, of the word
+        print(f"\nYou have {guesses} guesses left.");
         for letter in word_empty:
             print(f"{letter} ", end = "");
-        print("");
+        print("\n");
 
         # Take user input
         guess = input("Guess a character: ");
@@ -54,18 +64,23 @@ try:
         # Ensure input is valid
         # Should only be one character.
         if len(guess) > 1:
-            print("You may only guess one character at a time.");
+            os.system("clear");
+            print("You may only guess one character at a time.", end = "");
             guesses -= 1;
             continue;
 
         if guess.isalpha() != True:
-            print("You have to guess a letter.");
+            os.system("clear");
+            print("You have to guess a letter.", end = "");
+            continue;
+            
 
         #If user attempts to guess an already found word,
         # Remove a guess and tell the user its already been found.
         if guess in word_set: 
-            print("That letter has already been guessed");
+            print("That letter has already been guessed", end = "");
             guesses -= 1;
+            os.system("clear");
             continue;
 
         # Lookup in the dictionary for the letter.
@@ -77,29 +92,22 @@ try:
                 word_empty[index] = guess;
             word_dict.pop(guess);
             word_set.add(guess);
+            os.system("clear");
 
 
         #If the guess is just wrong: Tell them its wrong, 
         # then subtract a guess.
         else:
-            print("Sorry, that letter is not in the word.");
+            os.system("clear");
+            print("Sorry, that letter is not in the word.", end = "");
             guesses -= 1;
-            continue;
+        
 
-        ## At the end of the loop, check if the dictionary is empty.
-
-        # if its empty, break the loop and congratulate the user etc etc.
-        if len(word_dict) == 0:
-            print(f"\n\nYou guessed all the letters!\nThe word was -> \"{word_rand}\"");
-            break;
-
-        if guesses == 0:
-            print(f"\n\nYou ran out of guesses!\nThe word was -> \"{word_rand}\"");
-            break;
-
-        # if it isnt, go to the next loop
+    if guesses == 0:
+        print(f"\n\nYou ran out of guesses!\nThe word was -> \"{word_rand}\"");
+    print("\nThank you for playing!\nYou may restart the program to play another round.");
 
     word_file.close();
 except IOError:
     print("File not found.");
-#ndef
+#END
